@@ -15,4 +15,4 @@ Collision Maze
 Управление WASD.
 
 #### Демка
-<a href="#">Поиграть</a>
+<a href="https://munimaev.github.io/collision-maze/">Выехать из лабиринта!</a>
