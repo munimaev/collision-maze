@@ -1,0 +1,468 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <title>pixi.js example 1</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #222;
+            /*height: 100%;*/
+            position: absolute;
+            top:0;
+            left:0;
+            right: 0;
+            bottom:0;
+        }
+        #cDiv {
+            height: 100%;
+            width: 100%;
+        }
+    </style>
+    <script src="public/js/jquery.min.js"></script>
+    <script src="public/js/pixi.js"></script>
+    <script src="public/js/car.js"></script>
+    <script src="public/js/block.js"></script>
+</head>
+<body>
+<div id="cDiv"></div>
+    <script>
+
+    var startTime = null;
+    var endTime = null;
+   // create an new instance of a pixi stage
+    var stage = new PIXI.Stage(0xFFFFFF);
+
+    // create a renderer instance.
+    var renderHeight = $("#cDiv").height() -4 // 650;
+    var renderWidth = $("#cDiv").width() -4//= 800;
+    var renderer = PIXI.autoDetectRenderer(renderWidth, renderHeight);
+ 
+    renderer.view.crossOrigin = "Anonymous"
+    renderer.view.src = "url"
+
+    // add the renderer view element to the DOM
+    cDiv.appendChild(renderer.view);
+ 
+    requestAnimFrame( animate );
+ 
+
+
+    var allObjStatic = [];
+
+
+var labirint = ""
++"..........R000R.........R000R.........R000R000000000R000R.........R000R.........R000R..........\n"
++".........R     R.......R     R.......R     R   F   R     R.......R     R.......R     R.........\n"
++"........R       R.....R       R.....R       R     R       R.....R       R.....R       R........\n"
++"...R000R    g    R000R         R000R         R0B0R         R000R         R000R         R000R...\n"
++"..R             R             R             R     R                                         R..\n"
++".R             R             R             R       R                                         R.\n"
++"R         R000R         R   R         R000R         R000R         R000R         R000R         R\n"
++".R       R             R             R             R             R     R       R             R.\n"
++"..R     R             R             R             R             R       R     R             R..\n"
++"...R   R         R000R         R000R         R   R         R000R         R000R         R000R...\n"
++"..R             R             R     R       R             R                   R             R..\n"
++".R             R             R       R     R             R                     R             R.\n"
++"R         R000R         R000R         R   R         R000R         R   R         R000R         R\n"
++".R       R     R                     R     R       R             R     R             R       R.\n"
++"..R     R       R                   R       R     R             R       R             R     R..\n"
++"...R000R         R000R         R   R         R0B0R         R000R         R000R         R   R...\n"
++"..R     R             R       R     R       R     R             R             R       R     R..\n"
++".R       R             R     R       R     R       R             R             R     R       R.\n"
++"R         R   R         R000R         R   R         R000R         R000R         R000R         R\n"
++".R       R     R             R                     R     R             R       R             R.\n"
++"..R     R       R             R                   R       R             R     R             R..\n"
++"...R   R         R000R         R000R         R   R         R000R         R   R         R000R...\n"
++"..R             R             R     R       R             R             R             R     R..\n"
++".R             R             R       R     R             R             R             R       R.\n"
++"R         R000R         R   R         R000R         R0G0R         R000R         R   R         R\n"
++".R       R     R       R             R     R       R     R             R       R             R.\n"
++"..R     R       R     R             R       R     R       R             R     R             R..\n"
++"...R   R         R000R         R   R         R0B0R         R000R         R000R         R   R...\n"
++"..R                   R       R     R                     R             R             R     R..\n"
++".R                     R     R       R                   R             R             R       R.\n"
++"R         R000R         R000R         R   R         R000R         R000R         R000R         R\n"
++".R       R     R             R       R     R       R     R             R       R     R       R.\n"
++"..R     R       R             R     R       R     R       R             R     R       R     R..\n"
++"...R000R         R000R         R   R         R0B0R         R000R         R000R         R000R...\n"
++"..R                   R       R     R       R             R             R                   R..\n"
++".R                     R     R       R     R             R             R                     R.\n"
++"R         R000R         R   R         R   R         R   R         R000R         R000R         R\n"
++".R       R             R     R       R     R       R                   R             R       R.\n"
++"..R     R             R       R     R       R     R                     R             R     R..\n"
++"...R   R         R000R         R   R         R   R         R000R         R000R         R   R...\n"
++"..R     R             R       R             R     R       R     R       R             R     R..\n"
++".R       R             R     R             R       R     R       R     R             R       R.\n"
++"R         R000R         R   R         R000R         R000R         R000R         R000R         R\n"
++".R       R             R     R       R     R             R                     R     R       R.\n"
++"..R     R             R       R     R       R             R                   R       R     R..\n"
++"...R000R         R000R         R000R         R0B0R         R   R         R000R         R0Y0R...\n"
++"..R             R     R       R                   R             R       R                   R..\n"
++".R             R       R     R                     R             R     R                     R.\n"
++"R         R000R         R   R         R000R         R000R         R000R         R   R         R\n"
++".R       R                   R       R     R             R       R             R     R       R.\n"
++"..R     R                     R     R       R             R     R             R       R     R..\n"
++"...R0B0R         R000R         R   R         R0U0R         R000R         R000R         R000R...\n"
++"..R             R     R       R                   R       R     R       R     R       R     R..\n"
++".R             R       R     R                     R     R       R     R       R     R       R.\n"
++"R         R000R         R   R         R000R         R   R    b    R   R         R   R         R\n"
++".R       R             R     R             R       R             R     R       R             R.\n"
++"..R     R             R       R             R     R             R       R     R             R..\n"
++"...R000R         R   R         R000R         R0U0R         R000R         R   R         R   R...\n"
++"..R             R     R             R       R     R       R             R     R       R     R..\n"
++".R             R       R             R     R       R     R             R       R     R       R.\n"
++"R         R000R         R000R         R000R         R000R         R000R         R000R         R\n"
++".R             R       R                           R     R       R             R             R.\n"
++"..R             R     R                           R       R     R             R             R..\n"
++"...R000R         R   R         R000R         R0U0R         R   R         R000R         R000R...\n"
++"..R             R     R             R       R             R     R             R       R     R..\n"
++".R             R       R             R     R             R       R             R     R       R.\n"
++"R         R000R    u    R000R         R000R         R   R         R000R         R   R         R\n"
++".R       R     R       R             R     R       R     R             R       R     R       R.\n"
++"..R     R       R     R             R       R     R       R             R     R       R     R..\n"
++"...R   R         R000R         R   R         R   R         R000R         R   R         R   R...\n"
++"..R     R                     R     R       R     R       R             R             R     R..\n"
++".R       R                   R       R     R   y   R     R             R             R       R.\n"
++"R         R   R         R   R         R   R    C    R   R         R000R         R000R         R\n"
++".R             R       R     R             R       R             R     R       R             R.\n"
++"..R             R     R       R             R     R             R       R     R             R..\n"
++"...R   R         R000R         R   R         R0U0R         R000R         R   R         R   R...\n"
++"..R     R       R             R     R       R     R       R                           R     R..\n"
++".R       R     R             R       R     R       R     R                           R       R.\n"
++"R         R000R         R000R         R000R         R000R    y    R000R         R000R         R\n"
++".R       R.....R       R.....R       R.....R       R.....R       R.....R       R.....R       R.\n"
++"..R     R.......R     R.......R     R.......R     R.......R     R.......R     R.......R     R..\n"
++"...R000R.........R000R.........R000R.........R000R.........R000R.........R000R.........R000R..0"
+
+labirint = labirint.split('');
+
+    var x = 0;
+    var y = 0;
+for (var i in  labirint) {
+    var l = labirint[i];
+    switch (l) {
+        case ".":
+            addBigGhost(x,y);
+            x++;
+            break;
+        case "R":
+            addBigDiamond(x,y);
+            x++;
+            break;
+        case "C":
+            addCar(x,y,1);
+            x++;
+            break;
+        case "\n":
+            y++;
+            x=0;
+            break;
+        default:
+            x++;
+            break;
+    }
+}
+    var x = 0;
+    var y = 0;
+for (var i in  labirint) {
+    var l = labirint[i];
+    switch (l) {
+        case ".":
+            x++;
+            break;
+        case "0":
+            addBigBlock(x,y);
+            x++;
+            break;
+        case "R":
+            x++;
+            break;
+        case "F":
+            addFinish(x,y,1);
+            x++;
+            break;
+        case "C":
+            x++;
+            break;
+        case "B":
+        case "U":
+        case "G":
+        case "Y":
+            addLock(x,y,l);
+            x++;
+            break;
+        case "b":
+        case "u":
+        case "g":
+        case "y":
+            addKey(x,y,l);
+            x++;
+            break;
+        case "S":
+            addColon(x,y);
+            x++;
+            break;
+        case "\n":
+            y++;
+            x=0;
+            break;
+        case " ":
+            x++;
+            break;
+        default:
+            break;
+    }
+}
+
+
+    function addBigBlock(x,y,a,t) {
+        var a = a || Math.round(Math.random()*4)/2*Math.PI; ;
+        var myRect = new Rect(PIXI.Texture.fromImage("public/pics/sq64.jpg"), t);
+        myRect.anchor.x = 0.5;
+        myRect.anchor.y = 0.5;
+        myRect.position.x = x*64 + 32;
+        myRect.position.y = y*64 + 32; 
+        myRect.rotation = a;
+        stage.addChild(myRect);
+        allObjStatic.push(myRect);
+    }
+    function addBigGhost(x,y,a,t) {
+        var a = a || Math.round(Math.random()*4)/2*Math.PI; ;
+        var myRect = new Ghost(PIXI.Texture.fromImage("public/pics/sq64.jpg"), t);
+        myRect.anchor.x = 0.5;
+        myRect.anchor.y = 0.5;
+        myRect.position.x = x*64 + 32;
+        myRect.position.y = y*64 + 32; 
+        myRect.rotation = a;
+        stage.addChild(myRect);
+        allObjStatic.push(myRect);
+    }
+    function addBigDiamond(x,y,a) {
+        var a = a ||  (Math.round(Math.random()*4)/2+0.25)*Math.PI; ;
+        var myRect = new Rect(PIXI.Texture.fromImage("public/pics/R.jpg"));
+        myRect.anchor.x = 0.5;
+        myRect.anchor.y = 0.5;
+        myRect.position.x = x*64 + 32;
+        myRect.position.y = y*64 + 32; 
+        myRect.rotation = a;
+        stage.addChild(myRect);
+        allObjStatic.push(myRect);
+    }
+    function addColon(x,y) {
+       var myColon = new Colon(PIXI.Texture.fromImage("public/pics/cars/colon.png"));
+       myColon.anchor.x = 0.375;
+       myColon.anchor.y = 0.375;
+       myColon.position.x = x*64 + 32;
+       myColon.position.y = y*64 + 32; 
+       stage.addChild(myColon);
+       allObjStatic.push(myColon);
+
+    }
+    var myCar;
+    function addCar(x,y) {
+        // create a texture from an image path
+        var texture = PIXI.Texture.fromImage("public/pics/cars/blueCar.png");
+        // create a new Sprite using the texture
+        myCar = new Car(texture);
+        myCar.anchor.x = 0.5;
+        myCar.anchor.y = 0.5;
+        myCar.position.x = x*64 + 32;
+        myCar.position.y = y*64 + 32;
+        // myCar.rotation = Math.PI;
+        stage.addChild(myCar);
+
+    }
+    function addFinish(x,y) {
+        var a = a || 0;
+        var myRect = new Finish(PIXI.Texture.fromImage("public/pics/finish.png"));
+        myRect.anchor.x = 0.5;
+        myRect.anchor.y = 0.5;
+        myRect.position.x = x*64 + 32;
+        myRect.position.y = y*64 + 32; 
+        myRect.rotation = a;
+        // myRect.rotation = 2; 
+        stage.addChild(myRect);
+        allObjStatic.push(myRect);
+    }
+
+    function addLock(x,y,c) {
+        var textures = {
+            B : 'Black',
+            G : 'Green',
+            Y : 'Yelow',
+            U : 'Blue'
+        }
+        var myRect = new Lock(PIXI.Texture.fromImage("public/pics/lock"+textures[c]+"Block.png"),c);
+        myRect.anchor.x = 0.5;
+        myRect.anchor.y = 0.5;
+        myRect.position.x = x*64 + 32;
+        myRect.position.y = y*64 + 32; 
+        // myRect.rotation = 2; 
+        stage.addChild(myRect);
+        allObjStatic.push(myRect);
+    }
+    function addKey(x,y,c) {
+        var textures = {
+            b : 'Black',
+            g : 'Green',
+            y : 'Yellow',
+            u : 'Blue'
+        }
+        var C = c.toUpperCase();
+        var myRect = new Key(PIXI.Texture.fromImage("public/pics/key"+textures[c]+".png"),C);
+        myRect.anchor.x = 0.5;
+        myRect.anchor.y = 0.5;
+        myRect.position.x = x*64 + 32;
+        myRect.position.y = y*64 + 32; 
+        // myRect.rotation = 2; 
+        stage.addChild(myRect);
+        allObjStatic.push(myRect);
+    }
+
+
+
+    function cameraMove(f) {
+        if (myCar.position.x > 0.66 * renderWidth) {
+            var d = myCar.position.x - 0.66 * renderWidth;
+            var lastObj = allObjStatic[allObjStatic.length-1];
+
+            if (lastObj.position.x + lastObj.width / 2 - d < renderWidth  && !f) {
+                d = renderWidth - lastObj.position.x - (lastObj.width / 2);
+            }
+            if (d < 0) d = 0;
+
+            for (var i = allObjStatic.length - 1; i >= 0; i--) {
+                allObjStatic[i].position.x -= d;
+            };
+            myCar.position.x -= d;
+        }
+        else if (myCar.position.x < 0.33 * renderWidth) {
+            var d = 0.33 * renderWidth - myCar.position.x ;
+            var firstObj = allObjStatic[0];
+
+            if (firstObj.position.x - firstObj.width / 2 + d > 0 && !f) {
+                d = 0 - firstObj.position.x + (firstObj.width / 2);
+            }
+            if (d < 0) d = 0;
+
+            for (var i = allObjStatic.length - 1; i >= 0; i--) {
+                allObjStatic[i].position.x += d;
+            };
+            myCar.position.x += d;
+        }
+
+
+        if (myCar.position.y > 0.66 * renderHeight) {
+            var d = myCar.position.y - 0.66 * renderHeight;
+            var lastObj = allObjStatic[allObjStatic.length-1];
+            
+            if (lastObj.position.y + lastObj.height / 2 - d < renderHeight && !f) {
+                d = renderHeight - lastObj.position.y - (lastObj.height / 2);
+            }
+            if (d < 0) d = 0;
+            for (var i = allObjStatic.length - 1; i >= 0; i--) {
+                allObjStatic[i].position.y -= d;
+            };
+
+            myCar.position.y -= d;
+
+        }
+        else if (myCar.position.y < 0.33 * renderHeight) {
+            var d = 0.33 * renderHeight - myCar.position.y ;
+            var firstObj = allObjStatic[0];
+
+            if (firstObj.position.y - firstObj.height / 2 + d > 0 && !f) {
+                d = 0 - firstObj.position.y + (firstObj.height / 2);
+            }
+            if (d < 0) d = 0;
+
+            for (var i = allObjStatic.length - 1; i >= 0; i--) {
+                allObjStatic[i].position.y += d;
+            };
+
+            myCar.position.y += d;
+
+        }
+        // console.log(myCar.position)
+    }
+
+
+
+
+  
+
+
+
+    var pointA = new PIXI.Sprite(PIXI.Texture.fromImage("public/pics/cars/A.png"));
+    pointA.anchor.x = 0;
+    pointA.anchor.y = 0;
+    pointA.position.x = 10;
+    pointA.position.y = 10; 
+    stage.addChild(pointA);
+
+    var pointB = new PIXI.Sprite(PIXI.Texture.fromImage("public/pics/cars/B.png"));
+    pointB.anchor.x = 1;
+    pointB.anchor.y = 0;
+    pointB.position.x = 10;
+    pointB.position.y = 20; 
+    stage.addChild(pointB);
+
+    var pointC = new PIXI.Sprite(PIXI.Texture.fromImage("public/pics/cars/C.png"));
+    pointC.anchor.x = 0;
+    pointC.anchor.y = 1;
+    pointC.position.x = 10;
+    pointC.position.y = 30; 
+    stage.addChild(pointC);
+    
+        // cameraMove(true);
+
+    function animate() {
+        if (endTime) {
+            return;
+        } 
+        requestAnimFrame( animate );
+
+        if (keys.d) myCar.cRotate(+1);
+        if (keys.a) myCar.cRotate(-1);
+        if (keys.w) myCar.cAccelerate();
+        if (keys.s) myCar.cAccelerate(true);
+
+        myCar.move();
+        cameraMove();
+
+        renderer.render(stage);
+    }
+
+
+    var keys = {
+        w : false,
+        a : false,
+        s : false,
+        d : false,
+    }
+    $body = $('body');
+    var keyFunc = function(e,b) {
+        // console.log(e.keyCode)
+        switch (e.keyCode) {
+            case 68 : keys.d = b; break;
+            case 65 : keys.a = b; break;
+            case 87 : keys.w = b; break;
+            case 83 : keys.s = b; break;
+        }
+    }
+    $body.keyup(function(e) {
+        if (startTime === null) {
+            startTime = new Date();
+        }
+        keyFunc(e,false);
+    })
+    $body.keydown(function(e) {
+        keyFunc(e,true);
+    }) 
+
+    </script>
+ 
+    </body>
+</html>
